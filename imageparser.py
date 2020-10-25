@@ -11,7 +11,10 @@ def binarizeImage(frame):
     #Conversion of the image to Grayscale
     img = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-    imgBlur = cv.GaussianBlur(img, (9, 9), 0)
+    if img.shape[0]<1000 or img.shape[1]<1000:
+        imgBlur = cv.GaussianBlur(img, (7, 7), 0)
+    else:
+        imgBlur = cv.GaussianBlur(img, (9, 9), 0)
 
     #TEST
     # plt.imshow(imgBlur, cmap='gray', vmin=0, vmax=255)
@@ -126,7 +129,7 @@ def getWarped(corners, img):
     # plt.imshow(result, cmap='gray', vmin=0, vmax=255)
     # plt.show()
 
-    return result, max(width, height), dst_pts
+    return result, max(width, height)
 
 
 #Creates a matrix containing the numbers contained in the unsolved sudoku image
@@ -184,7 +187,7 @@ def solveSudoku(sudokugrid, original, dic = None):
     #If the image is a frame of the video searches the sudoku in the dictionary
         if dic:
             (key, solved) = sudokudict.search(dic, sudokustring)
-             #print("search: " + str(solved))
+            print("search: " + str(solved))
         else:
             solved = False
 
@@ -215,7 +218,7 @@ def solutionToMatrix(solved, sudokuGrid):
 
 
 #Writes the solution on the original image
-def writeSudoku(original, sudokuGrid, dimension, dst, corners, frame):
+def writeSudoku(original, sudokuGrid, dimension, corners, frame):
 
     #sudokuWhite is a layer on which the numbers composing the solution will be written and that will be overlapped to the original image frame
     sudokuWhite = np.zeros((dimension, dimension,3))
@@ -237,6 +240,7 @@ def writeSudoku(original, sudokuGrid, dimension, dst, corners, frame):
     # plt.show()
 
     #Undo the warp perspective to match the original image
+    dst = np.float32([[0,0],[0,dimension],[dimension,dimension],[dimension,0]])
     m = cv.getPerspectiveTransform(dst,corners)
     solutionLayer = cv.warpPerspective(sudokuWhite, m, (frame.shape[1],frame.shape[0]))
 

@@ -8,13 +8,13 @@ def solveImage(frame, dic = None):
 
     binaryImage = imageparser.binarizeImage(frame)
     corners = imageparser.findCorners(binaryImage)
-    warped, dimension, dst_pts = imageparser.getWarped(corners, binaryImage)
+    warped, dimension = imageparser.getWarped(corners, binaryImage)
     sudokuGrid, original = imageparser.readSudoku(warped, 450) #tesseract works best with 30 pixel high text
     solved, original = imageparser.solveSudoku(sudokuGrid, original, dic)
 
     if solved is not False:
         sudokuGrid = imageparser.solutionToMatrix(solved, sudokuGrid)
-        return imageparser.writeSudoku(original, sudokuGrid, dimension, dst_pts, corners, frame)
+        return imageparser.writeSudoku(original, sudokuGrid, dimension, corners, frame)
     else:
         if dic == None:
             print("It was not possible to solve the sudoku")
