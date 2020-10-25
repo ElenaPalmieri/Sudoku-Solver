@@ -11,7 +11,7 @@ def binarizeImage(frame):
     #Conversion of the image to Grayscale
     img = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-    imgBlur = cv.GaussianBlur(img, (7, 7), 0)
+    imgBlur = cv.GaussianBlur(img, (9, 9), 0)
 
     #TEST
     # plt.imshow(imgBlur, cmap='gray', vmin=0, vmax=255)
@@ -141,7 +141,8 @@ def readSudoku(img, dimension):
     original = np.zeros((9,9), dtype=int)
 
     #Tesseract reads black text on white background
-    sudokuWhite = cv.bitwise_not(img)
+    sudokuW = cv.bitwise_not(img)
+    sudokuWhite =  cv.resize(sudokuW, (dimension,dimension)) 
 
     for i in range(9):
         row = i*cellDim
@@ -226,7 +227,8 @@ def writeSudoku(original, sudokuGrid, dimension, dst, corners, frame):
         for j in range(9):
             #Only if the original reading of the grid the cell was empty, the number is written on the image
             if original[i][j]==0 :
-                cv.putText(sudokuWhite, str(sudokuGrid[i][j]), (row, col), cv.FONT_HERSHEY_DUPLEX , 1, color = (0, 0, 255) , thickness=2)
+                fontdim =  dimension/500
+                cv.putText(sudokuWhite, str(sudokuGrid[i][j]), (row, col), cv.FONT_HERSHEY_DUPLEX , fontdim, color = (0, 0, 255) , thickness=2)
             row = row + int(dimension/9)
         col = col + int(dimension/9)
 
