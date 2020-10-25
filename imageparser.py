@@ -184,7 +184,7 @@ def solveSudoku(sudokugrid, original, dic = None):
     #If the image is a frame of the video searches the sudoku in the dictionary
         if dic:
             (key, solved) = sudokudict.search(dic, sudokustring)
-            print("search: " + str(solved))
+             #print("search: " + str(solved))
         else:
             solved = False
 
