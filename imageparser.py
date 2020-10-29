@@ -106,12 +106,6 @@ def getWarped(corners, img):
     rect = cv.minAreaRect(corners)
     center, size, theta = rect
 
-    # Angle correction
-    if theta < -45:
-        theta += 90
-
-    rect = (center, size, theta)
-
     # get width and height of the detected rectangle
     width = int(rect[1][0])
     height = int(rect[1][1])
@@ -228,7 +222,7 @@ def writeSudoku(original, sudokuGrid, dimension, corners, frame):
     for i in range(9):
         row=int((3*(dimension/9))/10)
         for j in range(9):
-            #Only if the original reading of the grid the cell was empty, the number is written on the image
+            #Only if in the original reading of the grid the cell was empty, the number is written on the image
             if original[i][j]==0 :
                 fontdim =  dimension/500
                 cv.putText(sudokuWhite, str(sudokuGrid[i][j]), (row, col), cv.FONT_HERSHEY_DUPLEX , fontdim, color = (0, 0, 255) , thickness=2)
